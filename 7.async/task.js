@@ -15,17 +15,19 @@ class AlarmClock {
         }
         this.alarmCollection.push(
             {
-                id: id,
-                time: time,
-                callback: callback
+                id,
+                time,
+                callback
             }
         )
     }
 
     removeClock(id) {
+        const startLengthAlarmCollection = this.alarmCollection.length
         this.alarmCollection = this.alarmCollection.filter(
             element => element.id !== id
         )
+        return this.alarmCollection.length === startLengthAlarmCollection;
     }
 
     getCurrentFormattedTime() {
@@ -34,20 +36,21 @@ class AlarmClock {
     }
 
     start() {
-        const checkClock = (alarm) => {
-            if (alarm.time === this.getCurrentFormattedTime()) {
-                alarm.callback;
-            }
-            if (alarm.id === undefined) {
-                this.timerId = setInterval(() => this.alarmCollection.forEach(element =>
-                    checkClock(element)
-                ))
-            }
+        if (this.timerId === null) {
+            this.timerId = setInterval(() => this.alarmCollection.forEach(element =>
+                checkClock(element)
+            ))
         }
     }
 
+    checkClock(alarm) {
+        if (alarm.time === this.getCurrentFormattedTime()) {
+            alarm.callback();
+        }        
+    }
+
     stop() {
-        if (this.timerId !== undefined) {
+        if (this.timerId !== null) {
             clearInterval(this.timerId);
             this.timerId = null;
         }
