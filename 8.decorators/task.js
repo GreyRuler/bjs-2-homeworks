@@ -1,5 +1,5 @@
 function cachingDecoratorNew(func) {
-  let cache = {};
+  let cache = [];
 
   function add(...args) {
     const hash = args.toString();
@@ -21,33 +21,38 @@ function cachingDecoratorNew(func) {
 }
 
 function debounceDecoratorNew(func, ms) {
-  let flag = false;
+  let flag = false
+  let timeout;
 
-  return function () {
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+      console.timeEnd("time");
+    }, ms);
     if (flag) {
       return;
     }
     flag = true;
-    setTimeout(() => {
-      flag = false;
-      func();
-    }, ms);
+    func(...args);
   };
 }
 
 function debounceDecorator2(func, ms) {
   let flag = false;
+  let timeout;
 
-  function wrapper() {
+  function wrapper(...args) {
     wrapper.count += 1;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, ms);
     if (flag) {
       return;
     }
     flag = true;
-    setTimeout(() => {
-      flag = false;
-      func();
-    }, ms);
+    func(...args);
   };
 
   wrapper.count = 0;
