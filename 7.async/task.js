@@ -27,7 +27,7 @@ class AlarmClock {
         this.alarmCollection = this.alarmCollection.filter(
             element => element.id !== id
         )
-        return this.alarmCollection.length === startLengthAlarmCollection;
+        return !(this.alarmCollection.length === startLengthAlarmCollection);
     }
 
     getCurrentFormattedTime() {
@@ -38,7 +38,7 @@ class AlarmClock {
     start() {
         if (this.timerId === null) {
             this.timerId = setInterval(() => this.alarmCollection.forEach(element =>
-                checkClock(element)
+                this.checkClock(element)
             ))
         }
     }
